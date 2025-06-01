@@ -33,7 +33,7 @@ export const graph: Command<CommandArgs> = {
   command: (args) => {
     log(`Scanning the code and generating the ${args.file} file...`);
     const source = path.resolve(args.source);
-    const excludes = (args.exclude || '').split('');
+    const excludes = (args.exclude || '').split(',');
     const domains: { [domain: string]: string[] } = {};
     const types: { [domain: string]: 'file' | 'feature' | 'npm' } = {};
     const domainFromPath = (filePath: string) => {
@@ -69,6 +69,7 @@ export const graph: Command<CommandArgs> = {
         domains[domain] = domains[domain] || [];
         types[domain] = domain.includes('.') ? 'file' : 'feature';
         if (!domains[domain].includes(importDomain) && importDomain !== domain && !excludes.includes(importDomain)) {
+          console.log(excludes, importDomain);
           domains[domain].push(importDomain);
         }
       });
@@ -85,7 +86,7 @@ flowchart TB${
   ), []).join('')
 }
 ${
-  Object.keys(types).map((domain) => `
+  Object.keys(types).filter((domain) => !excludes.includes(domain)).map((domain) => `
   ${name(domain)}@{ shape: ${{
   file: 'notch-rect',
   feature: 'rounded',

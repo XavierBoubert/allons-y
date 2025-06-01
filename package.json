@@ -1,0 +1,50 @@
+{
+  "name": "@a-y/ay",
+  "version": "0.1.1",
+  "description": "",
+  "author": "Xavier Boubert <xavier@allons-y.io>",
+  "license": "MIT",
+  "main": "./dist/cli.js",
+  "types": "./dist/cli.d.ts",
+  "bin": {
+    "ay": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XavierBoubert/allons-y-cli.git"
+  },
+  "homepage": "https://github.com/XavierBoubert/allons-y-cli",
+  "bugs": {
+    "url": "https://github.com/XavierBoubert/allons-y-cli/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">= 22.13.1",
+    "npm": ">= 10.9.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "publish": "rm -rf dist && npm run build && npm publish"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@types/yargs": "^17.0.33",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
+    "typescript": "^5.8.3"
+  }
+}

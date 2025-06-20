@@ -29,8 +29,7 @@
     "npm": ">= 10.9.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "publish": "rm -rf dist && npm run build && npm publish"
+    "build": "rm -rf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "chalk": "^5.4.1",

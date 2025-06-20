@@ -5,8 +5,8 @@ import * as fs from 'node:fs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import * as cmds from './index.js';
-import { totalTimeReadable } from './commands.js';
-import type { Command } from './commands.js';
+import { totalTimeReadable } from './commands/index.js';
+import type { Command } from './commands/index.js';
 import { log, chalk } from './logger/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

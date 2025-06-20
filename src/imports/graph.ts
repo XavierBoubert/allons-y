@@ -1,6 +1,6 @@
 import { globSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { Command } from '../commands.js';
+import type { Command } from '../commands/index.js';
 import { chalk, log } from '../logger/index.js';
 
 export type CommandArgs = { source: string, file: string, exclude?: string, npm?: boolean };
@@ -35,6 +35,7 @@ export const graph: Command<CommandArgs> = {
     const source = path.resolve(args.source);
     const excludes = (args.exclude || '').split(',');
     const domains: { [domain: string]: string[] } = {};
+    const childrenTimes: { [domain: string]: number } = {};
     const types: { [domain: string]: 'file' | 'feature' | 'npm' } = {};
     const domainFromPath = (filePath: string) => {
       const relativePath = filePath.replace(`${source}${path.sep}`, '');
@@ -67,21 +68,23 @@ export const graph: Command<CommandArgs> = {
         types[importDomain] = types[importDomain] || 'npm';
 
         domains[domain] = domains[domain] || [];
+        childrenTimes[domain] = childrenTimes[domain] || 0;
         types[domain] = domain.includes('.') ? 'file' : 'feature';
         if (!domains[domain].includes(importDomain) && importDomain !== domain && !excludes.includes(importDomain)) {
-          console.log(excludes, importDomain);
           domains[domain].push(importDomain);
+          childrenTimes[domain] = (childrenTimes[domain] || 0) + 1;
         }
       });
     });
 
     const name = (d: string) => `A${Object.keys(types).indexOf(d)}`;
     const link = (d: string) => `-${types[d] === 'npm' ? '.' : ''}->`;
+    const sortChildren = (a: string, b: string) => childrenTimes[a] - childrenTimes[b];
 
     writeFileSync(args.file, `# IMPORTS
 \`\`\`mermaid
 flowchart TB${
-  Object.keys(domains).reduce<string[]>((acc, domain) => acc.concat(
+  Object.keys(domains).sort(sortChildren).reduce<string[]>((acc, domain) => acc.concat(
     domains[domain].map((target) => `\n  ${name(target)}["${target}"] ${link(target)} ${name(domain)}["${domain}"]`),
   ), []).join('')
 }

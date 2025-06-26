@@ -15,11 +15,14 @@ const cwd = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(fs.readFileSync(path.join(cwd, '../package.json'), 'utf8'));
 
 const y = yargs(hideBin(process.argv))
-  .scriptName('ay')
+  .scriptName(process.env.npm_lifecycle_event === 'npx' ? 'npx allons-y' : 'ay')
   .middleware((argv) => {
     // eslint-disable-next-line no-param-reassign
     argv.startDate = new Date();
-  });
+  })
+  .epilog(process.env.npm_lifecycle_event === 'npx'
+    ? 'You can globally install allons-y with "npm i -g allons-y" and then execute only the global "ay" command instead of "npx allons-y"!'
+    : '');
 
 Object.keys(commands).forEach((key) => {
   const command = commands[key];

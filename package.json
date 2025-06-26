@@ -29,10 +29,12 @@
     "npm": ">= 10.9.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json"
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build:watch": "rm -rf dist && tsc -p tsconfig.build.json --watch"
   },
   "dependencies": {
     "chalk": "^5.4.1",
+    "table": "^6.9.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
